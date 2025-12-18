@@ -5,7 +5,7 @@ pipeline {
             steps {
                 echo 'Building Docker image...'
                 // Збираємо образ з вашим нікнеймом
-                sh 'docker build -t vikatushn/jenkins-lab:latest .'
+                sh 'docker build -t whosvictu/jenkins-lab:latest .'
             }
         }
         stage('Test') {
@@ -22,7 +22,7 @@ pipeline {
                     // Логінимось у Docker Hub
                     sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
                     // Відправляємо образ
-                    sh 'docker push vikatushn/jenkins-lab:latest'
+                    sh 'docker push whosvictu/jenkins-lab:latest'
                 }
             }
         }
