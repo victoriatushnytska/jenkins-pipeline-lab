@@ -4,7 +4,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Docker image...'
-                sh 'docker build -t myapp:latest .'
+                // Збираємо образ з вашим нікнеймом
+                sh 'docker build -t vikatushn/jenkins-lab:latest .'
             }
         }
         stage('Test') {
@@ -15,8 +16,14 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                echo 'Deploy stage (local)'
-                sh 'docker images'
+                echo 'Pushing to DockerHub...'
+                // Використовуємо збережений пароль (ID має бути dockerhub-credentials)
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    // Логінимось у Docker Hub
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                    // Відправляємо образ
+                    sh 'docker push vikatushn/jenkins-lab:latest'
+                }
             }
         }
     }
